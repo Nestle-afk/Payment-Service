@@ -41,7 +41,7 @@ databaseChangeLog:
 
               - column:
                   name: payment_amount
-                  type: DECIMAL(12,2)
+                  type: DOUBLE
                   constraints:
                     nullable: false
 
