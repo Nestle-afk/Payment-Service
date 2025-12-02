@@ -2,22 +2,18 @@ spring:
   application:
     name: payment-service
 
-  datasource:
-    url: jdbc:postgresql://localhost:5433/payment_db
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+  data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017/payment_db?authSource=admin
 
   liquibase:
-    enabled: true
+    change-log: db/changelog/db.changelog-master.yaml
+
+liquibase:
+  enabled: true
+  change-log: classpath:db.changelog/db.changelog-master.yaml
+  url: mongodb://localhost:27017/payment_db
+
 
 server:
   port: 8002
