@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("!test")
 public class LiquibaseConfig {
 
     @Value("${spring.data.mongodb.uri}")
@@ -24,14 +26,13 @@ public class LiquibaseConfig {
 
     @PostConstruct
     public void runLiquibase() throws Exception {
-        // создаём Liquibase DatabaseConnection на основе mongodb URI
         DatabaseConnection connection = DatabaseFactory.getInstance()
                 .openConnection(
-                        mongoUri,      // mongodb://localhost:27017/payment_db?authSource=admin
-                        null,          // username
-                        null,          // password
-                        null,          // driver
-                        null           // default catalog
+                        mongoUri,
+                        null,
+                        null,
+                        null,
+                        null
                 );
 
         Database database = new MongoLiquibaseDatabase();

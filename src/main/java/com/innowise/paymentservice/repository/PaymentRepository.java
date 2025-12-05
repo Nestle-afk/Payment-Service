@@ -1,27 +1,28 @@
 package com.innowise.paymentservice.repository;
 
-import com.innowise.paymentservice.model.OrderStatus;
 import com.innowise.paymentservice.model.Payment;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import com.innowise.paymentservice.model.PaymentStatus;
+import org.springframework.data.mongodb.repository.Aggregation;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface PaymentRepository extends JpaRepository<Payment, Long> {
+public interface PaymentRepository extends MongoRepository<Payment, String> {
 
-    List<Payment> findAllByOrderId(Long orderId);
+    List<Payment> findByOrderId(Long order_id);
 
-    List<Payment> findAllByUserId(Long userId);
-    List<Payment> findAllByStatusIn(List<OrderStatus> statuses);
+    List<Payment> findByUserId(Long user_id);
 
-    @Query("""
-        SELECT COALESCE(SUM(p.paymentAmount), 0)
-        FROM Payment p
-        WHERE p.timestamp BETWEEN :start AND :end
-    """)
-    Double getTotalAmountForPeriod(LocalDateTime start, LocalDateTime end);
+    List<Payment> findByStatusIn(List<PaymentStatus> statuses);
+
+    @Aggregation(pipeline = {
+            "{ $match: { timestamp: { $gte: ?0, $lte: ?1 } } }",
+            "{ $group: { _id: null, total: { $sum: \"$payment_amount\" } } }"
+    })
+    Double getTotalPaymentsSum(LocalDateTime startDate, LocalDateTime endDate);
 }
+
 

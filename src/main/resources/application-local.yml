@@ -14,6 +14,9 @@ liquibase:
   change-log: classpath:db.changelog/db.changelog-master.yaml
   url: mongodb://localhost:27017/payment_db
 
+external:
+  random-api:
+    url: https://www.randomnumberapi.com/api/v1.0/random?min=1&max=100
 
 server:
   port: 8002

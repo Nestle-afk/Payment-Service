@@ -1,42 +1,39 @@
 package com.innowise.paymentservice.model;
 
-import jakarta.persistence.*;
+
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.time.LocalDateTime;
 
-@Entity
-@Table(
-        name = "payments",
-        indexes = {
-                @Index(name = "idx_payments_order_id", columnList = "order_id"),
-                @Index(name = "idx_payments_user_id", columnList = "user_id"),
-                @Index(name = "idx_payments_status", columnList = "status"),
-                @Index(name = "idx_payments_timestamp", columnList = "timestamp")
-        }
-)
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Document(collection = "payments")
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "order_id")
+    @Indexed
+    @Field("order_id")
     private Long orderId;
 
-    @Column(name = "user_id")
+    @Indexed
+    @Field("user_id")
     private Long userId;
 
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    @Indexed
+    private PaymentStatus status;
 
-    @Column(name = "timestamp")
+    @Indexed
     private LocalDateTime timestamp;
 
-    @Column(name = "payment_amount")
+    @Field("payment_amount")
     private Double paymentAmount;
 }
+
