@@ -1,0 +1,9 @@
+spring:
+  liquibase:
+    enabled: false
+
+external:
+  random-api:
+    url: http://localhost:${wiremock.server.port}/random
+
+
