@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-payments-collection
+      author: arca9
+      changes:
+
+        - createCollection:
+            collectionName: payments
+
+#        - runCommand:
+#            json: >
+#              { "createIndexes": "payments", "indexes": [ { "name": "idx_order_id", "key": { "order_id": 1 } } ] }
+#
+#        - runCommand:
+#            json: >
+#              { "createIndexes": "payments", "indexes": [ { "name": "idx_user_id", "key": { "user_id": 1 } } ] }
+#
+#        - runCommand:
+#            json: >
+#              { "createIndexes": "payments", "indexes": [ { "name": "idx_status", "key": { "status": 1 } } ] }
+#
+#        - runCommand:
+#            json: >
+#              { "createIndexes": "payments", "indexes": [ { "name": "idx_timestamp", "key": { "timestamp": 1 } } ] }
+#
+
