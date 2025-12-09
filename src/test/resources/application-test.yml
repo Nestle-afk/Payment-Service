@@ -5,3 +5,5 @@ spring:
 external:
   random-api:
     url: http://localhost:${wiremock.server.port}/random
+
+

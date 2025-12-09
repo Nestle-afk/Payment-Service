@@ -1,6 +1,7 @@
 package com.innowise.paymentservice.service;
 
 import com.innowise.paymentservice.config.RandomApiProperties;
+import com.innowise.paymentservice.dto.CreatePaymentEvent;
 import com.innowise.paymentservice.dto.PaymentRequest;
 import com.innowise.paymentservice.dto.PaymentResponse;
 import com.innowise.paymentservice.mapper.PaymentMapper;
@@ -9,6 +10,7 @@ import com.innowise.paymentservice.model.PaymentStatus;
 import com.innowise.paymentservice.repository.PaymentRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,6 +25,8 @@ public class PaymentService {
     private final PaymentMapper paymentMapper;
     private final RestTemplate restTemplate;
     private final RandomApiProperties randomApiProperties;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private static final String CREATE_PAYMENT_TOPIC = "create-payment-topic";
 
     public PaymentResponse createPayment(PaymentRequest request) {
 
@@ -44,6 +48,21 @@ public class PaymentService {
                 .build();
 
         Payment saved = paymentRepository.save(payment);
+
+        // Send CREATE_PAYMENT event to Kafka
+        CreatePaymentEvent event = new CreatePaymentEvent(
+                saved.getOrderId(),
+                saved.getUserId(),
+                saved.getPaymentAmount(),
+                saved.getStatus()
+        );
+
+        try {
+            kafkaTemplate.send(CREATE_PAYMENT_TOPIC, event);
+            log.info("CREATE_PAYMENT event sent for order ID: {}, status: {}", saved.getOrderId(), saved.getStatus());
+        } catch (Exception e) {
+            log.error("Failed to send CREATE_PAYMENT event for order ID: {}", saved.getOrderId(), e);
+        }
 
         return paymentMapper.toResponse(saved);
     }
