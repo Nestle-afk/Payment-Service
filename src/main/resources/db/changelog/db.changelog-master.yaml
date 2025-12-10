@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/V1/001-create-payments-collection.yaml
+
+
