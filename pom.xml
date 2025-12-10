@@ -19,6 +19,7 @@
 		<org.apache.commons.version>3.18.0</org.apache.commons.version>
 		<liquibase.version>4.29.2</liquibase.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<sonar.organization>nestle-afk</sonar.organization>
 	</properties>
 
 	<dependencies>
