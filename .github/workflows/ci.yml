@@ -37,8 +37,7 @@ jobs:
             -Dsonar.java.binaries=target/classes
 
       - name: Build Docker Image
-        run: |
-          docker build -t payment-service:latest .
+        run: docker build -t payment-service:latest Payment-Service
 
       - name: Save Docker Image as Artifact
         run: |
